@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <!-- Comandos -->
+   <extension point="org.eclipse.ui.commands">
+      <command
+            id="graphql.mapper.commands.generateGraphQLDTO"
+            name="Gerar GraphQL DTO"
+            defaultHandler="graphql.mapper.handlers.GenerateGraphQLDTOHandler">
+      </command>
+      <command
+            id="graphql.mapper.commands.mountRestRequest"
+            name="Montar Rest Request"
+            defaultHandler="graphql.mapper.handlers.MountRestRequestHandler">
+      </command>
+      <command
+            id="graphql.mapper.commands.configuration"
+            name="Configuration"
+            defaultHandler="graphql.mapper.handlers.ConfigurationHandler">
+      </command>
+   </extension>
+
+   <!-- Menu de Contexto -->
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               id="graphql.mapper.menu"
+               label="GraphQL Mapper"
+               icon="icons/plugin_icon.png">
+            <command
+                  commandId="graphql.mapper.commands.generateGraphQLDTO"
+                  icon="icons/plugin_icon.png"
+                  label="Gerar GraphQL DTO"
+                  style="push">
+            </command>
+            <command
+                  commandId="graphql.mapper.commands.mountRestRequest"
+                  icon="icons/plugin_icon.png"
+                  label="Montar Rest Request"
+                  style="push">
+            </command>
+            <command
+                  commandId="graphql.mapper.commands.configuration"
+                  icon="icons/config.png"
+                  label="Configuration"
+                  style="push">
+            </command>
+         </menu>
+         <visibleWhen checkEnabled="false">
+            <with variable="activeMenuSelection">
+               <iterate ifEmpty="false" operator="or">
+                  <adapt type="org.eclipse.core.resources.IResource"/>
+               </iterate>
+            </with>
+         </visibleWhen>
+      </menuContribution>
+   </extension>
+
+</plugin>
+

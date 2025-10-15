@@ -1,0 +1,33 @@
+# Build directories
+/target/
+/bin/
+
+# Eclipse project files (comentados porque agora estão versionados)
+# .classpath
+# .project
+.settings/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Maven
+dependency-reduced-pom.xml
+.mvn/wrapper/
+mvnw
+mvnw.cmd
+
+# Logs
+*.log
+*.log.*
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
