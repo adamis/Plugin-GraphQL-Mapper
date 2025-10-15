@@ -32,5 +32,19 @@ public class GraphQLParamExtractor {
         return parametros;
     }
 
+	public static String extrairNomeQuery(String json) {
+	    if (json == null) return null;
+
+	    // Regex: captura a palavra após 'query' e antes de '{'
+	    java.util.regex.Matcher matcher = java.util.regex.Pattern
+	        .compile("\\bquery\\s+(\\w+)\\s*\\{")
+	        .matcher(json);
+
+	    if (matcher.find()) {
+	        return matcher.group(1); // o nome da query
+	    }
+
+	    return null; // se não encontrar
+	}
     
 }

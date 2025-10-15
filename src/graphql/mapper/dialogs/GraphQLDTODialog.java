@@ -1,6 +1,7 @@
 package graphql.mapper.dialogs;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,14 +46,17 @@ public class GraphQLDTODialog extends Dialog {
     private String queryJson;
     private Text filePathText;
     private IResource resource;
-    private Text Package;
+    private Text packagePath;
     private Text text;
     private Table table;
+    private String packageFilePath;
+   
 
     public GraphQLDTODialog(Shell parentShell, IResource resource, String filePath) {
         super(parentShell);
         this.filePath = filePath;
         this.resource = resource;
+     
     }
 
     @Override
@@ -80,8 +84,8 @@ public class GraphQLDTODialog extends Dialog {
         lblArquivoDto.setText("Package DTO:");
         lblArquivoDto.setBounds(10, 84, 111, 15);
         
-        Package = new Text(container, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
-        Package.setBounds(126, 84, 407, 40);
+        packagePath = new Text(container, SWT.BORDER | SWT.READ_ONLY | SWT.WRAP);
+        packagePath.setBounds(126, 84, 407, 40);
         
         Button btnNewButton = new Button(container, SWT.NONE);
         btnNewButton.setText("...");
@@ -201,7 +205,11 @@ public class GraphQLDTODialog extends Dialog {
                 Object[] results = dialog.getResult();
                 if (results != null && results.length > 0) {
                     IPackageFragment selectedPackage = (IPackageFragment) results[0];
-                    Package.setText(selectedPackage.getElementName());
+                    // INSERT_YOUR_CODE
+                    // Pega o caminho real do sistema de arquivos para o package selecionado
+                    IResource packageResource = selectedPackage.getCorrespondingResource();
+                    packageFilePath = packageResource.getLocation().toOSString();                    
+                    packagePath.setText(selectedPackage.getElementName());
                 }
             }
         } catch (Exception ex) {
@@ -218,7 +226,7 @@ public class GraphQLDTODialog extends Dialog {
     @Override
     protected void okPressed() {
         // Validar campos antes de executar
-        String packageName = Package.getText().trim();
+        String packageName = packagePath.getText().trim();
         String dtoName = text.getText().trim();
         
         if (packageName.isEmpty()) {
@@ -258,7 +266,7 @@ public class GraphQLDTODialog extends Dialog {
 			}
         	 		     
 	            // Criar e executar a thread de geração do DTO        	
-            GraphQLDTOServiceRunnable runnable = new GraphQLDTOServiceRunnable(filePath,packageName,listHM,dtoName, queryJson);
+            GraphQLDTOServiceRunnable runnable = new GraphQLDTOServiceRunnable(filePath,packageName,listHM,dtoName, queryJson,packageFilePath);
             Thread thread = new Thread(runnable, "Gerando DTO");
             thread.start(); // Usar start() ao invés de run() para executar em nova thread
             
@@ -306,7 +314,7 @@ public class GraphQLDTODialog extends Dialog {
      * Getters para serem usados pelo service
      */
     public String getPackageName() {
-        return Package != null ? Package.getText().trim() : "";
+        return packagePath != null ? packagePath.getText().trim() : "";
     }
     
     public String getDtoName() {
