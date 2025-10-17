@@ -23,14 +23,7 @@ public class Utils {
 		return new BufferedReader(new InputStreamReader(p.getErrorStream()));
 	}
 
-	public static void main(String[] args) {
-		// String table = "alunos-cursos";
-		// System.err.println("1 "+normalizerStringCapHifen(table));
-		// System.err.println("1 "+normalizerString(table));
-		// System.err.println("2 "+normalizerStringCaps(table));
-		// System.err.println("3 "+normalizerStringCommom(table));
-		// System.err.println("4 "+normalizerStringCommomNotCap(table));
-	}
+	
 
 	/**
 	 * (alunos-cursos) Replace "_" to "-"
@@ -58,6 +51,14 @@ public class Utils {
 		return text.toLowerCase();
 	}
 
+	public static String lowercaseFirstLetter(String input) {
+	    if (input == null || input.isEmpty()) {
+	        return input; // retorna como está se for nula ou vazia
+	    }
+	    return input.substring(0, 1).toLowerCase() + input.substring(1);
+	}
+
+	
 	/**
 	 * (alunosCursos) Replace "_" to "-" Not Capitalization in CammonCase
 	 * 

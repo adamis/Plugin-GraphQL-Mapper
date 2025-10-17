@@ -3,7 +3,6 @@ package graphql.mapper.service;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
@@ -89,10 +88,14 @@ public class GraphQLDTOServiceRunnable implements Runnable {
 				
 				
 			} else {
+				
+				
+				javax.swing.JOptionPane.showMessageDialog(null, "Erro na requisição GraphQL: " + (sendPostRequest != null ? sendPostRequest.code() : "No Response"), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
 				System.out.println("Erro na requisição GraphQL: " + (sendPostRequest != null ? sendPostRequest.code() : "No Response"));
 			}
 
 		} catch (Exception e) {			
+			javax.swing.JOptionPane.showMessageDialog(null, "Erro Geral: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}

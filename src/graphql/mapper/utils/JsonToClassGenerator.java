@@ -31,7 +31,7 @@ public class JsonToClassGenerator {
 		JSONObject jsonObject = new JSONObject(responseBody);
 		jsonObject = jsonObject.getJSONObject("data");
 		
-		JSONArray jsonArray = jsonObject.getJSONArray(nameQuery.toLowerCase());
+		JSONArray jsonArray = jsonObject.getJSONArray(Utils.lowercaseFirstLetter(nameQuery));
 	    carregaObjetos(jsonArray);
 
 		StringBuilder sb = new StringBuilder();		
