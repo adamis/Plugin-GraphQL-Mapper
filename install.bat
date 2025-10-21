@@ -9,7 +9,7 @@ echo ========================================
 echo.
 
 REM Verificar se o JAR existe
-if not exist "target\GraphQL-Mapper-1.0.0-SNAPSHOT.jar" (
+if not exist "target\GraphQL-Mapper-1.0.1.jar" (
     echo [AVISO] JAR nao encontrado. Executando build primeiro...
     call build.bat
     if %ERRORLEVEL% NEQ 0 (
@@ -48,7 +48,7 @@ if exist "%ECLIPSE_HOME%\dropins\GraphQL-Mapper*.jar" (
 
 REM Copiar novo plugin
 echo [INFO] Instalando plugin...
-copy "target\GraphQL-Mapper-1.0.0-SNAPSHOT.jar" "%ECLIPSE_HOME%\dropins\"
+copy "target\GraphQL-Mapper-1.0.1.jar" "%ECLIPSE_HOME%\dropins\"
 
 if %ERRORLEVEL% NEQ 0 (
     echo [ERRO] Falha ao copiar plugin!
@@ -60,7 +60,7 @@ echo ========================================
 echo   Plugin instalado com sucesso!
 echo ========================================
 echo.
-echo Local: %ECLIPSE_HOME%\dropins\GraphQL-Mapper-1.0.0-SNAPSHOT.jar
+echo Local: %ECLIPSE_HOME%\dropins\GraphQL-Mapper-1.0.1.jar
 echo.
 echo Para ativar o plugin:
 echo   1. Reinicie o Eclipse
@@ -73,5 +73,3 @@ echo   3. Procure por 'GraphQL-Mapper'
 echo.
 
 exit /b 0
-
-

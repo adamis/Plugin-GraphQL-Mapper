@@ -27,7 +27,8 @@ public class GraphQLDTOServiceRunnable implements Runnable {
 	private List<HashMap<String, String>> listHM;
 	private ObjectMapper mapper = new ObjectMapper();
 	private String packageFilePath;
-
+	private Exception exception;
+	
 	public GraphQLDTOServiceRunnable(String filePath, String packageName, 
 			List<HashMap<String, String>> listHM, String dtoName, String queryJson, String packageFilePath) {
 		this.filePath = filePath;
@@ -44,7 +45,7 @@ public class GraphQLDTOServiceRunnable implements Runnable {
 		try {
 			this.queryJson = this.queryJson.replaceFirst("\\([^)]*\\)", "").trim();
 
-			// INSERT_YOUR_CODE
+
 			for (int i = 0; i < listHM.size(); i++) {
 				String type = listHM.get(i).get(ColunsParams.TYPE.name()).equals("String!")?"\"":"";
 				this.queryJson = this.queryJson.replace(listHM.get(i).get(ColunsParams.PARAM.name()), type+listHM.get(i).get(ColunsParams.VALUE.name())+type);
@@ -66,7 +67,7 @@ public class GraphQLDTOServiceRunnable implements Runnable {
 			
 			RequestClientFactory RequestClientFactory = new RequestClientFactory();			
 			Response sendPostRequest = RequestClientFactory.sendPostRequest(
-					graphqlUrl, new HeaderFactory(),writeValueAsString, null, null, false);
+					graphqlUrl, new HeaderFactory(),writeValueAsString, 3000L, 8000L, false, false);
 
 			
 			if (sendPostRequest != null && sendPostRequest.isSuccessful()) {
@@ -88,16 +89,20 @@ public class GraphQLDTOServiceRunnable implements Runnable {
 				
 				
 			} else {
-				
-				
-				javax.swing.JOptionPane.showMessageDialog(null, "Erro na requisição GraphQL: " + (sendPostRequest != null ? sendPostRequest.code() : "No Response"), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+				String responseBody = sendPostRequest.body().string();
+				this.exception = new Exception("Erro na requisição GraphQL: [CODE]:" + (sendPostRequest != null ? sendPostRequest.code() : "No Response")+" [Response]:"+responseBody);
 				System.out.println("Erro na requisição GraphQL: " + (sendPostRequest != null ? sendPostRequest.code() : "No Response"));
 			}
 
-		} catch (Exception e) {			
-			javax.swing.JOptionPane.showMessageDialog(null, "Erro Geral: " + e.getMessage(), "Erro", javax.swing.JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {	
+			this.exception = e;
+			//JOptionPane.showMessageDialog(null, "Erro Geral: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}
+	
+	public Exception getException() {
+        return exception;
+    }
 
 }

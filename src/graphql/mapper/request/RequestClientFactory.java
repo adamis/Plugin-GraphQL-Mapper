@@ -97,7 +97,7 @@ public class RequestClientFactory {
 	 *@return Response
 	 *@throws IOException
 	 */
-	public Response sendGetRequest(String url, HeaderFactory headers, Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive) throws IOException {
+	public Response sendGetRequest(String url, HeaderFactory headers, Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive, boolean retryOnConnectionFailure) throws IOException {
 
 		okhttp3.Request.Builder builder = new Request.Builder();
 
@@ -112,7 +112,7 @@ public class RequestClientFactory {
 		callTimeOutMsTemp = callTimeOutMs == null ?callTimeOutMsTemp:callTimeOutMs;
 		readTimeOutMsTemp = readTimeOutMs == null ?readTimeOutMsTemp:readTimeOutMs;
 
-		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp, proxyActive);
+		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp, proxyActive,retryOnConnectionFailure);
 
 		return client.newCall(request).execute();
 	}
@@ -129,7 +129,7 @@ public class RequestClientFactory {
 	 *@return Response
 	 *@throws IOException
 	 */
-	public Response sendGetRequest(String url, HeaderFactory headers, ParamsFactory paramsFactory , Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive) throws IOException {
+	public Response sendGetRequest(String url, HeaderFactory headers, ParamsFactory paramsFactory , Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive, boolean retryOnConnectionFailure) throws IOException {
 
 		okhttp3.Request.Builder builder = new Request.Builder();
 
@@ -150,7 +150,7 @@ public class RequestClientFactory {
 		callTimeOutMsTemp = callTimeOutMs == null ?callTimeOutMsTemp:callTimeOutMs;
 		readTimeOutMsTemp = readTimeOutMs == null ?readTimeOutMsTemp:readTimeOutMs;
 
-		client = getClient(callTimeOutMsTemp, readTimeOutMsTemp, proxyActive);
+		client = getClient(callTimeOutMsTemp, readTimeOutMsTemp, proxyActive,retryOnConnectionFailure);
 
 		return client.newCall(request).execute();
 	}
@@ -168,7 +168,7 @@ public class RequestClientFactory {
 	 *@return Response
 	 *@throws IOException
 	 */
-	public Response sendPostRequest(String url, HeaderFactory headers, String json, Long callTimeOutMs, Long readTimeOutMs,boolean proxyActive) throws IOException {
+	public Response sendPostRequest(String url, HeaderFactory headers, String json, Long callTimeOutMs, Long readTimeOutMs,boolean proxyActive, boolean retryOnConnectionFailure) throws IOException {
 		RequestBody body = RequestBody.create(json, MediaType.parse("application/json; charset=utf-8"));
 
 		okhttp3.Request.Builder builder = new Request.Builder();
@@ -190,7 +190,7 @@ public class RequestClientFactory {
 		callTimeOutMsTemp = callTimeOutMs == null ?callTimeOutMsTemp:callTimeOutMs;
 		readTimeOutMsTemp = readTimeOutMs == null ?readTimeOutMsTemp:readTimeOutMs;
 
-		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp, proxyActive);
+		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp, proxyActive,retryOnConnectionFailure);
 
 		return client.newCall(request).execute();
 	}
@@ -213,7 +213,7 @@ public class RequestClientFactory {
 	 *@return Response
 	 *@throws IOException
 	 */
-	public <T> Response sendPostRequest(String url, HeaderFactory headers, T object, Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive) throws IOException {
+	public <T> Response sendPostRequest(String url, HeaderFactory headers, T object, Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive, boolean retryOnConnectionFailure) throws IOException {
 
 		ObjectWriter ow = new ObjectMapper().writer();
 		String json = ow.writeValueAsString(object);
@@ -234,7 +234,7 @@ public class RequestClientFactory {
 		callTimeOutMsTemp = callTimeOutMs == null ?callTimeOutMsTemp:callTimeOutMs;
 		readTimeOutMsTemp = readTimeOutMs == null ?readTimeOutMsTemp:readTimeOutMs;
 
-		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp,proxyActive);
+		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp,proxyActive,retryOnConnectionFailure);
 
 		return client.newCall(request).execute();
 	}
@@ -254,7 +254,7 @@ public class RequestClientFactory {
 	 *@return Response
 	 *@throws IOException
 	 */
-	public Response sendPostRequest(String url, HeaderFactory headers, FormsFactory form, Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive ) throws IOException {
+	public Response sendPostRequest(String url, HeaderFactory headers, FormsFactory form, Long callTimeOutMs, Long readTimeOutMs, boolean proxyActive, boolean retryOnConnectionFailure ) throws IOException {
 
 
 		okhttp3.Request.Builder builder = new Request.Builder();
@@ -276,7 +276,7 @@ public class RequestClientFactory {
 		callTimeOutMsTemp = callTimeOutMs == null ?callTimeOutMsTemp:callTimeOutMs;
 		readTimeOutMsTemp = readTimeOutMs == null ?readTimeOutMsTemp:readTimeOutMs;
 
-		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp,proxyActive);
+		client = getClient(callTimeOutMsTemp,readTimeOutMsTemp,proxyActive, retryOnConnectionFailure);
 
 		return client.newCall(request).execute();
 	}
@@ -290,7 +290,7 @@ public class RequestClientFactory {
 	 *@param proxyActive
 	 *@return
 	 */
-	private OkHttpClient getClient(long callTimeOutMsTemp,long readTimeOutMsTemp, boolean proxyActive ) {
+	private OkHttpClient getClient(long callTimeOutMsTemp,long readTimeOutMsTemp, boolean proxyActive, boolean retryOnConnectionFailure) { 
 
 		HttpLoggingInterceptor loggingInterceptorBody = new HttpLoggingInterceptor(message ->  System.err.println("Body> "+message));
 		loggingInterceptorBody.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -301,7 +301,7 @@ public class RequestClientFactory {
 		.callTimeout(callTimeOutMsTemp, TimeUnit.MILLISECONDS)
 		.readTimeout(readTimeOutMsTemp, TimeUnit.MILLISECONDS)
 		.addInterceptor(new RetryInterceptor(3,1000))
-		.retryOnConnectionFailure(true) // padrão é true
+		.retryOnConnectionFailure(retryOnConnectionFailure) // padrão é true
 		.addInterceptor(loggingInterceptorBody)
 		.addInterceptor(loggingInterceptorHeader)
 		;

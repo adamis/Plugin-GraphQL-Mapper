@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -275,12 +276,19 @@ public class GraphQLDTODialog extends Dialog {
             
             // Verificar se a thread ainda está rodando (timeout)
             if (thread.isAlive()) {
-                thread.interrupt();
-                showError("Timeout", "A geração do DTO está demorando muito. Tente novamente.");
+                thread.interrupt();                
                 return; // NÃO fecha o diálogo
             }
             
-            // Se chegou aqui, sucesso! Fecha o diálogo
+            if (runnable.getException() != null) {
+                showError("Erro ao gerar DTO", runnable.getException().getMessage());
+                return; // NÃO fecha o diálogo
+            }else{
+            	//showError("Timeout", "A geração do DTO está demorando muito. Tente novamente.");
+            	showSuccess("Sucesso","DTO gerado com sucesso!");
+            }
+            
+            // Se chegou aqui, sucesso! Fecha o diálogo            
             super.okPressed();
             
         } catch (InterruptedException e) {
@@ -298,7 +306,18 @@ public class GraphQLDTODialog extends Dialog {
      * Exibe uma mensagem de erro ao usuário
      */
     private void showError(String title, String message) {
-        org.eclipse.jface.dialogs.MessageDialog.openError(
+        MessageDialog.openError(
+            getShell(),
+            title,
+            message
+        );
+    }
+    
+    /**
+     * Exibe uma mensagem de sucesso ao usuário
+     */
+    private void showSuccess(String title, String message) {
+        MessageDialog.openInformation(
             getShell(),
             title,
             message

@@ -15,18 +15,18 @@
    ```
 
 2. **Localize o JAR do plugin**:
-   - O arquivo estará em: `target/GraphQL-Mapper-1.0.0-SNAPSHOT.jar`
+   - O arquivo estará em: `target/GraphQL-Mapper-1.0.1.jar`
 
 3. **Copie o JAR para a pasta dropins do Eclipse**:
    
    **Windows:**
    ```cmd
-   copy target\GraphQL-Mapper-1.0.0-SNAPSHOT.jar "C:\eclipse\dropins\"
+   copy target\GraphQL-Mapper-1.0.1.jar "C:\eclipse\dropins\"
    ```
    
    **Linux/macOS:**
    ```bash
-   cp target/GraphQL-Mapper-1.0.0-SNAPSHOT.jar ~/eclipse/dropins/
+   cp target/GraphQL-Mapper-1.0.1.jar ~/eclipse/dropins/
    ```
 
 4. **Reinicie o Eclipse**
@@ -202,5 +202,3 @@ Para atualizar uma versão já instalada:
 - [Documentação de Plugins Eclipse](https://www.eclipse.org/pde/)
 - [OSGi Framework](https://www.osgi.org/)
 - [Tycho Build](https://eclipse.dev/tycho/)
-
-

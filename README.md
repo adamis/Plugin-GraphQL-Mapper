@@ -75,7 +75,7 @@ mvn clean
 
 Após compilar o projeto, o arquivo JAR do plugin estará em:
 ```
-target/GraphQL-Mapper-1.0.0-SNAPSHOT.jar
+target/GraphQL-Mapper-1.0.1.jar
 ```
 
 ### Opção 1: Instalação Manual
@@ -129,4 +129,3 @@ target/GraphQL-Mapper-1.0.0-SNAPSHOT.jar
 - O plugin segue a arquitetura padrão de plugins Eclipse baseada em OSGi
 - Usa **Tycho** para build Maven de plugins Eclipse
 - Compatível com Windows, Linux e macOS (incluindo Apple Silicon)
-
