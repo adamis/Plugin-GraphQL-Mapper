@@ -25,7 +25,7 @@ jobs:
       - name: Find plugin JAR
         id: jar
         run: |
-          JAR_FILE=$(ls target/plugins/*.jar | grep -vE "sources|javadoc" | head -n 1)
+          JAR_FILE=$(ls target/*.jar | grep -vE "sources|javadoc" | head -n 1)
           echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
           echo "Found JAR: $JAR_FILE"
 
