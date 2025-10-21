@@ -1,4 +1,4 @@
-name: Build and Release Eclipse Plugin
+name: Release Maven Jar
 
 on:
   push:
@@ -17,22 +17,15 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: "21"
 
-      - name: Build with Maven (Tycho)
-        run: mvn -B clean verify --file pom.xml
+      - name: Build with Maven
+        run: mvn -B clean verify
 
-      - name: Find plugin JAR
-        id: jar
-        run: |
-          JAR_FILE=$(ls target/*.jar | grep -vE "sources|javadoc" | head -n 1)
-          echo "jar_file=$JAR_FILE" >> $GITHUB_OUTPUT
-          echo "Found JAR: $JAR_FILE"
-
-      - name: Create GitHub Release and Upload Artifact
-        uses: ncipollo/release-action@v1
+      - name: Upload JAR to Release
+        uses: softprops/action-gh-release@v2
         with:
-          tag: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
-          artifacts: ${{ steps.jar.outputs.jar_file }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            target/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
