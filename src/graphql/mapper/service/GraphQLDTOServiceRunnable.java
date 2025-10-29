@@ -43,14 +43,17 @@ public class GraphQLDTOServiceRunnable implements Runnable {
 	public void run() {
 
 		try {
-			this.queryJson = this.queryJson.replaceFirst("\\([^)]*\\)", "").trim();
+			
+			if(listHM.size() > 0) {
+				
+				this.queryJson = this.queryJson.replaceFirst("\\([^)]*\\)", "").trim();			
 
-
-			for (int i = 0; i < listHM.size(); i++) {
-				String type = listHM.get(i).get(ColunsParams.TYPE.name()).equals("String!")?"\"":"";
-				this.queryJson = this.queryJson.replace(listHM.get(i).get(ColunsParams.PARAM.name()), type+listHM.get(i).get(ColunsParams.VALUE.name())+type);
+				for (int i = 0; i < listHM.size(); i++) {
+					String type = listHM.get(i).get(ColunsParams.TYPE.name()).equals("String!")?"\"":"";
+					this.queryJson = this.queryJson.replace(listHM.get(i).get(ColunsParams.PARAM.name()), type+listHM.get(i).get(ColunsParams.VALUE.name())+type);
+				}
+				
 			}
-
 			// Busca a configuração do banco SQLite e preenche a variável graphqlUrl
 			String graphqlUrl = "";			
 			ConfigurationDatabase configurationDatabase = ConfigurationDatabase.getInstance();
